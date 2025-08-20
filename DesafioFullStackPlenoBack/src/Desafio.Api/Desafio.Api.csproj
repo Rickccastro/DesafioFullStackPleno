@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+    <ProjectReference Include="..\Desafio.Application\Desafio.Application.csproj" />
+    <ProjectReference Include="..\Desafio.Communication\Desafio.Communication\Desafio.Communication.csproj" />
+    <ProjectReference Include="..\Desafio.Infrastructure\Desafio.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
