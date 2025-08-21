@@ -1,8 +1,6 @@
 ﻿using Desafio.Domain.Entities;
 using Desafio.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 
 namespace Desafio.Infraestructure.DataAccess;
 
@@ -32,7 +30,7 @@ public partial class DesafioDbContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasConversion<string>() 
-                .HasDefaultValue("Pendente");
+                .HasDefaultValue($"'{StatusTarefa.Pendente}'");
             entity.Property(e => e.Titulo).HasMaxLength(200);
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Tarefas)

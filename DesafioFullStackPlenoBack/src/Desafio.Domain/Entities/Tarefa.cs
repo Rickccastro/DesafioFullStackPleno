@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Desafio.Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Desafio.Domain.Entities;
@@ -11,7 +12,7 @@ public partial class Tarefa
 
     public string? Descricao { get; set; }
 
-    public string Status { get; set; } = null!;
+    public StatusTarefa Status { get; set; } = StatusTarefa.Pendente;
 
     public DateTime DataCriacao { get; set; }
 
