@@ -1,8 +1,10 @@
-﻿using Desafio.Domain.Repositories;
+﻿using Desafio.Application.Security;
+using Desafio.Domain.Repositories;
 using Desafio.Domain.Repositories.Especificas;
 using Desafio.Infraestructure.DataAccess;
 using Desafio.Infrastructure.DataAcess;
 using Desafio.Infrastructure.DataAcess.Repositories.Entities;
+using Desafio.Infrastructure.Services.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ public static class DependencyInjectionExtension
     {
         AddRepositories(services);
         AddDbContext(services, configuration);
+        AddServices(services, configuration);
     }
 
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
@@ -30,6 +33,14 @@ public static class DependencyInjectionExtension
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+        services.AddScoped<ITarefaRepository, TarefaRepository>();
+    }
+    private static void AddServices(IServiceCollection services, IConfiguration configuration)
+    {
+        var expirationTimeMinutes = configuration.GetValue<uint>("Settings:Jwt:ExpiresMinutes");
+        var signingKey = configuration.GetValue<string>("Settings:Jwt:SigningKey");
 
+        services.AddScoped<IAccessTokenGenerator>(config => new JwtTokenGenerator(expirationTimeMinutes, signingKey!));
+        services.AddScoped<ILoggedUser, LoggedUser>();
     }
 }
