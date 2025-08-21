@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Desafio.Communication.Requests.Tarefa;
+﻿namespace Desafio.Communication.Requests.Tarefa;
 public class AtualizarTarefaRequest
 {
     public Guid Id { get; set; }
@@ -14,4 +8,3 @@ public class AtualizarTarefaRequest
     public string Status { get; set; } = null!;
     public Guid UsuarioId { get; set; }
 }
-
