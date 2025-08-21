@@ -6,10 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
@@ -20,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Desafio.Application\Desafio.Application.csproj" />
 	  <ProjectReference Include="..\Desafio.Domain\Desafio.Domain.csproj" />
 	</ItemGroup>
 
