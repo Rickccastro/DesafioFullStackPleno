@@ -3,6 +3,7 @@ using Desafio.Application.UseCase.Login;
 using Desafio.Application.UseCase.Tarefa.Atualizar;
 using Desafio.Application.UseCase.Tarefa.Criar;
 using Desafio.Application.UseCase.Tarefa.Deletar;
+using Desafio.Application.UseCase.Tarefa.Listar;
 using Desafio.Application.UseCase.Usuario.Atualizar;
 using Desafio.Application.UseCase.Usuario.Cria;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<ICriarTarefaUseCase, CriarTarefaUseCase>();
         services.AddScoped<IDeletarTarefaUseCase, DeletarTarefaUseCase>();
         services.AddScoped<IAtualizarTarefaUseCase, AtualizarTarefaUseCase>();
+        services.AddScoped<IListarTarefaUseCase, ListarTarefaUseCase>();
         services.AddScoped<ILoginUsuarioUseCase, LoginUsuarioUseCase>();
     }
 }
