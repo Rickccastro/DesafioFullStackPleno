@@ -19,12 +19,10 @@ public class CriarUsuarioUseCase : ICriarUsuarioUseCase
         _mapper = mapper;
     }
 
-    public async Task<UsuarioResponse> CriarUsuario(UsuarioRequest request)
+    public async Task<UsuarioResponse> CriarUsuario(CriarUsuarioRequest request)
     {
-        var userId = Guid.NewGuid();
-
         var usuario = _mapper.Map<Domain.Entities.Usuario>(request);
-
+        usuario.Id = Guid.NewGuid();
 
         await _usuarioRepository.AdicionarAsync(usuario);
         await _unitOfWork.Commit();

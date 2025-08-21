@@ -4,5 +4,5 @@ using Desafio.Communication.Responses.Usuario;
 namespace Desafio.Application.UseCase.Usuario.Cria;
 public interface ICriarUsuarioUseCase
 {
-    Task<UsuarioResponse> CriarUsuario(UsuarioRequest request);
+    Task<UsuarioResponse> CriarUsuario(CriarUsuarioRequest request);
 }
