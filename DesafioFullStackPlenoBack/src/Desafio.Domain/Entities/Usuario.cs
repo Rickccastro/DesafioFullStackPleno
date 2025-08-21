@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Desafio.Domain.Enums;
 
 namespace Desafio.Domain.Entities;
 
@@ -13,7 +12,7 @@ public partial class Usuario
 
     public string Senha { get; set; } = null!;
 
-    public string Perfil { get; set; } = null!;
+    public Perfis Perfil { get; set; } = Perfis.Usuario;
 
     public virtual ICollection<Tarefa> Tarefas { get; set; } = new List<Tarefa>();
 }
