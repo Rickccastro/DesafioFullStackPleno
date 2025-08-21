@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Desafio.Domain.Entities;
+﻿using Desafio.Domain.Entities;
+using Desafio.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace Desafio.Infraestructure.DataAccess;
 
@@ -20,10 +21,6 @@ public partial class DesafioDbContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=DesafioPlenoFullStackPleno;Trusted_Connection=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tarefa>(entity =>
@@ -34,6 +31,7 @@ public partial class DesafioDbContext : DbContext
             entity.Property(e => e.DataCriacao).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
+                .HasConversion<string>() 
                 .HasDefaultValue("Pendente");
             entity.Property(e => e.Titulo).HasMaxLength(200);
 
@@ -52,8 +50,9 @@ public partial class DesafioDbContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(200);
             entity.Property(e => e.Nome).HasMaxLength(200);
             entity.Property(e => e.Perfil)
+                .HasConversion<string>()
                 .HasMaxLength(50)
-                .HasDefaultValue("USUARIO");
+                .HasDefaultValueSql($"'{Perfis.Usuario}'"); 
             entity.Property(e => e.Senha).HasMaxLength(200);
         });
 
