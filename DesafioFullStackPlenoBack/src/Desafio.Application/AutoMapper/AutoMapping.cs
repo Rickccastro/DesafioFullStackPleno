@@ -23,7 +23,8 @@ public class AutoMapping : Profile
         .ForMember(dest => dest.Perfil, opt => opt.MapFrom(src => Enum.Parse<Perfis>(src.Perfil, true)));
 
         CreateMap<AtualizarUsuarioRequest, Usuario>();
-        CreateMap<AtualizarTarefaRequest, Tarefa>();
+        CreateMap<AtualizarTarefaRequest, Tarefa>()
+                    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Perfis>(src.Status, true)));   
     }
     private void EntidadeParaResponse()
     {
