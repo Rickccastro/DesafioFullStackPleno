@@ -22,7 +22,7 @@ namespace Desafio.Exception {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ResourceErrorMessages {
+    public class ResourceErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Desafio.Exception {
         ///   Retorna a instância de ResourceManager armazenada em cache usada por essa classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Desafio.Exception.ResourceErrorMessages", typeof(ResourceErrorMessages).Assembly);
@@ -51,7 +51,7 @@ namespace Desafio.Exception {
         ///   pesquisas de recursos que usam essa classe de recurso de tipo de alta segurança.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,9 +63,18 @@ namespace Desafio.Exception {
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Login invalido, email ou senha incorretos..
         /// </summary>
-        internal static string EMAIL_OU_SENHA_INVALIDO {
+        public static string EMAIL_OU_SENHA_INVALIDO {
             get {
                 return ResourceManager.GetString("EMAIL_OU_SENHA_INVALIDO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nome do Usuario está vazio..
+        /// </summary>
+        public static string NOME_VAZIO {
+            get {
+                return ResourceManager.GetString("NOME_VAZIO", resourceCulture);
             }
         }
     }
