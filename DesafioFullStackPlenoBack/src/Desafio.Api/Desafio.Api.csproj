@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Desafio.Application\Desafio.Application.csproj" />
     <ProjectReference Include="..\Desafio.Communication\Desafio.Communication\Desafio.Communication.csproj" />
+    <ProjectReference Include="..\Desafio.Exception\Desafio.Exception.csproj" />
     <ProjectReference Include="..\Desafio.Infrastructure\Desafio.Infrastructure.csproj" />
   </ItemGroup>
 
