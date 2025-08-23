@@ -3,6 +3,8 @@ using Desafio.Communication.Requests.Tarefa;
 using Desafio.Communication.Responses.Tarefa;
 using Desafio.Domain.Repositories;
 using Desafio.Domain.Repositories.Especificas;
+using Desafio.Exception.ExceptionBase;
+using Desafio.Exceptions.ExceptionBase;
 
 namespace Desafio.Application.UseCase.Tarefa.Atualizar;
 public class AtualizarTarefaUseCase : IAtualizarTarefaUseCase
@@ -20,10 +22,12 @@ public class AtualizarTarefaUseCase : IAtualizarTarefaUseCase
 
     public async Task<TarefaResponse> AtualizarTarefa(AtualizarTarefaRequest request)
     {
+        this.Validate(request);
+
         var tarefa = await _tarefaRepository.ObterPorIdAsync(request.Id);
 
         if (tarefa == null)
-            throw new Exception("Tarefa não encontrada.");
+            throw new NotFoundException("Tarefa não encontrada.");
 
         _mapper.Map(request, tarefa);
 
@@ -31,5 +35,18 @@ public class AtualizarTarefaUseCase : IAtualizarTarefaUseCase
         await _unitOfWork.Commit();
 
         return _mapper.Map<TarefaResponse>(tarefa);
+    }
+    private void Validate(AtualizarTarefaRequest request)
+    {
+        var validator = new TarefaValidator();
+
+        var result = validator.Validate(request);
+
+        if (result.IsValid == false)
+        {
+            var errorMessages = result.Errors.Select(f => f.ErrorMessage).ToList();
+
+            throw new ErrorOnValidationException(errorMessages);
+        }
     }
 }

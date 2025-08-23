@@ -4,5 +4,5 @@ using Desafio.Communication.Responses.Tarefa;
 namespace Desafio.Application.UseCase.Tarefa.Deletar;
 public interface IDeletarTarefaUseCase
 {
-    Task<TarefaResponse> DeletarTarefa(DeletarTarefaRequest request);
+    Task<TarefaResponse> DeletarTarefa(Guid request);
 }

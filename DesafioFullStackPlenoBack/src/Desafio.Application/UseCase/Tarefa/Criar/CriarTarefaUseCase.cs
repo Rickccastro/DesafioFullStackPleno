@@ -3,6 +3,7 @@ using Desafio.Communication.Requests.Tarefa;
 using Desafio.Communication.Responses.Tarefa;
 using Desafio.Domain.Repositories;
 using Desafio.Domain.Repositories.Especificas;
+using Desafio.Exceptions.ExceptionBase;
 
 namespace Desafio.Application.UseCase.Tarefa.Criar;
 public class CriarTarefaUseCase : ICriarTarefaUseCase
@@ -20,6 +21,7 @@ public class CriarTarefaUseCase : ICriarTarefaUseCase
     }
     public async Task<TarefaResponse> CriarTarefa(CriarTarefaRequest request)
     {
+        this.Validate(request);
         var tarefa = _mapper.Map<Domain.Entities.Tarefa>(request);
         tarefa.Id = Guid.NewGuid();
 
@@ -27,5 +29,18 @@ public class CriarTarefaUseCase : ICriarTarefaUseCase
         await _unitOfWork.Commit();
 
         return _mapper.Map<TarefaResponse>(tarefa);
+    }
+    private void Validate(CriarTarefaRequest request)
+    {
+        var validator = new TarefaValidator();
+
+        var result = validator.Validate(request);
+
+        if (result.IsValid == false)
+        {
+            var errorMessages = result.Errors.Select(f => f.ErrorMessage).ToList();
+
+            throw new ErrorOnValidationException(errorMessages);
+        }
     }
 }

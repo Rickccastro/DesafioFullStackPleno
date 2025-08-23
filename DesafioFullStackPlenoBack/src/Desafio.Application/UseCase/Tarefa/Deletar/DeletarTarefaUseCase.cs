@@ -5,6 +5,7 @@ using Desafio.Communication.Responses.Tarefa;
 using Desafio.Communication.Responses.Usuario;
 using Desafio.Domain.Repositories;
 using Desafio.Domain.Repositories.Especificas;
+using Desafio.Exception.ExceptionBase;
 
 namespace Desafio.Application.UseCase.Tarefa.Deletar;
 public class DeletarTarefaUseCase : IDeletarTarefaUseCase
@@ -19,14 +20,12 @@ public class DeletarTarefaUseCase : IDeletarTarefaUseCase
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    public async Task<TarefaResponse> DeletarTarefa(DeletarTarefaRequest request)
+    public async Task<TarefaResponse> DeletarTarefa(Guid tarefaId)
     {
-        var tarefa = await _tarefaRepository.ObterPorIdAsync(request.Id);
+        var tarefa = await _tarefaRepository.ObterPorIdAsync(tarefaId);
 
         if (tarefa == null)
-            throw new Exception("Tarefa não encontrada.");
-
-        _mapper.Map(request, tarefa);
+            throw new NotFoundException("Tarefa não encontrada.");
 
         await _tarefaRepository.RemoverAsync(tarefa);
         await _unitOfWork.Commit();

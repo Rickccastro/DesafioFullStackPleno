@@ -5,6 +5,7 @@ using Desafio.Communication.Responses.Login;
 using Desafio.Communication.Responses.Usuario;
 using Desafio.Domain.Repositories;
 using Desafio.Domain.Repositories.Especificas;
+using Desafio.Exceptions.ExceptionBase;
 
 namespace Desafio.Application.UseCase.Login;
 public class LoginUsuarioUseCase : ILoginUsuarioUseCase
@@ -25,7 +26,7 @@ public class LoginUsuarioUseCase : ILoginUsuarioUseCase
         var usuario = await _usuarioRepository.ObterPorPropriedadeAsync(u=> u.Email == request.Email && u.Senha == request.Senha);
 
         if (usuario == null)
-            throw new Exception("Login incorreto, verifique seus dados.");
+            throw new InvalidLoginException();
 
         var loginResponse = _mapper.Map<LoginUsuarioResponse>(usuario);
 
