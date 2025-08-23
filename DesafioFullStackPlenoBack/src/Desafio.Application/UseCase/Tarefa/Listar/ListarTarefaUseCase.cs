@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using Desafio.Communication.Responses.Tarefa;
-using Desafio.Domain.Repositories;
 using Desafio.Domain.Repositories.Especificas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio.Application.UseCase.Tarefa.Listar;
 public class ListarTarefaUseCase : IListarTarefaUseCase
@@ -22,7 +16,7 @@ public class ListarTarefaUseCase : IListarTarefaUseCase
 
     public async Task<List<TarefaResponse>> ListarTarefa()
     {
-        var ultimasCincoTarefas = await _tarefaRepository.ObterUltimasCincoAsync();
+        var ultimasCincoTarefas = await _tarefaRepository.ObterTodosAsync();
 
         return _mapper.Map<List<TarefaResponse>>(ultimasCincoTarefas);
     }
