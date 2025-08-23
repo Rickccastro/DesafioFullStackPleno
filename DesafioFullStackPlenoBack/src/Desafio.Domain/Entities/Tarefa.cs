@@ -14,7 +14,7 @@ public partial class Tarefa
 
     public StatusTarefa Status { get; set; } = StatusTarefa.Pendente;
 
-    public DateTime DataCriacao { get; set; }
+    public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
     public Guid UsuarioId { get; set; }
 
