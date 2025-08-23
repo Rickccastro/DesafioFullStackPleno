@@ -1,8 +1,14 @@
 ﻿using AutoMapper;
+using Desafio.Application.Security;
 using Desafio.Communication.Requests.Usuario;
 using Desafio.Communication.Responses.Usuario;
 using Desafio.Domain.Repositories;
 using Desafio.Domain.Repositories.Especificas;
+using Desafio.Exception.ExceptionBase;
+using Desafio.Exceptions;
+using Desafio.Exceptions.ExceptionBase;
+using FluentValidation.Results;
+using System.ComponentModel.DataAnnotations;
 
 namespace Desafio.Application.UseCase.Usuario.Atualizar;
 public class AtualizarUsuarioUseCase : IAtualizarUsuarioUseCase
@@ -10,7 +16,6 @@ public class AtualizarUsuarioUseCase : IAtualizarUsuarioUseCase
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-
 
     public AtualizarUsuarioUseCase(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork, IMapper mapper)
     {
@@ -21,10 +26,12 @@ public class AtualizarUsuarioUseCase : IAtualizarUsuarioUseCase
 
     public async Task<UsuarioResponse> AtualizarUsuario(AtualizarUsuarioRequest request)
     {
+        await this.Validate(request);
+
         var usuario = await _usuarioRepository.ObterPorIdAsync(request.Id);
 
         if (usuario == null)
-            throw new Exception("Usuário não encontrado.");
+            throw new NotFoundException("Usuário não encontrado.");
 
         _mapper.Map(request, usuario);
 
@@ -32,5 +39,19 @@ public class AtualizarUsuarioUseCase : IAtualizarUsuarioUseCase
         await _unitOfWork.Commit();
 
         return _mapper.Map<UsuarioResponse>(usuario);
+    }
+
+    private async Task Validate(AtualizarUsuarioRequest request)
+    {
+        var validator = new ValidadorAtualizarUsuario();
+
+        var result = validator.Validate(request);  
+
+        if (result.IsValid == false)
+        {
+            var errorMessages = result.Errors.Select(error => error.ErrorMessage).ToList();
+
+            throw new ErrorOnValidationException(errorMessages);
+        }
     }
 }
