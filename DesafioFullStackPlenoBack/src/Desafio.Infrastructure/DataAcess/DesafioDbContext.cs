@@ -29,8 +29,8 @@ public partial class DesafioDbContext : DbContext
             entity.Property(e => e.DataCriacao).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
-                .HasConversion<string>() 
-                .HasDefaultValue($"'{StatusTarefa.Pendente}'");
+                .HasConversion<string>()
+                .HasDefaultValue(StatusTarefa.Pendente);
             entity.Property(e => e.Titulo).HasMaxLength(200);
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Tarefas)
@@ -50,7 +50,7 @@ public partial class DesafioDbContext : DbContext
             entity.Property(e => e.Perfil)
                 .HasConversion<string>()
                 .HasMaxLength(50)
-                .HasDefaultValueSql($"'{Perfis.Usuario}'"); 
+                .HasDefaultValue(Perfis.Usuario); 
             entity.Property(e => e.Senha).HasMaxLength(200);
         });
 
