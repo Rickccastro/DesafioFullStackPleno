@@ -9,13 +9,4 @@ public class TarefaRepository : RepositoryBase<Tarefa>, ITarefaRepository
     public TarefaRepository(DesafioDbContext context) : base(context)
     {
     }
-
-    public virtual async Task<List<Tarefa>> ObterUltimasCincoAsync()
-    {
-        return await _dbSet
-            .AsNoTracking()                 
-            .OrderByDescending(t => t.DataCriacao) 
-            .Take(5)                             
-            .ToListAsync();                     
-    }
 }
