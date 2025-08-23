@@ -7,6 +7,8 @@ using Desafio.Communication.Responses.Tarefa;
 using Desafio.Communication.Responses.Usuario;
 using Desafio.Domain.Entities;
 using Desafio.Domain.Enums;
+using AutoMapper.Extensions.EnumMapping;
+
 
 namespace Desafio.Application.AutoMapper;
 public class AutoMapping : Profile
@@ -15,16 +17,19 @@ public class AutoMapping : Profile
     {
         RequestParaEntidade();
         EntidadeParaResponse();
+        MappingEnumToString();
     }
     private void RequestParaEntidade()
     {
         CreateMap<CriarUsuarioRequest, Usuario>()
-        .ForMember(dest => dest.Id, opt => opt.Ignore())
-        .ForMember(dest => dest.Perfil, opt => opt.MapFrom(src => Enum.Parse<Perfis>(src.Perfil, true)));
+        .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<CriarTarefaRequest, Tarefa>()
+        .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<AtualizarUsuarioRequest, Usuario>();
-        CreateMap<AtualizarTarefaRequest, Tarefa>()
-                    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Perfis>(src.Status, true)));   
+
+        CreateMap<AtualizarTarefaRequest, Tarefa>();
     }
     private void EntidadeParaResponse()
     {
@@ -32,5 +37,18 @@ public class AutoMapping : Profile
         CreateMap<Tarefa, TarefaResponse>();
         CreateMap<Usuario, LoginUsuarioResponse>()
 .ForMember(dest => dest.Token, opt => opt.Ignore());
+    }
+
+
+    private void MappingEnumToString()
+    {
+        CreateMap<string, StatusTarefa>()
+         .ConvertUsing(src => Enum.Parse<StatusTarefa>(src,true));
+
+        CreateMap<StatusTarefa, string>()
+            .ConvertUsing(status => status.ToString());
+
+        CreateMap<Perfis, string>()
+            .ConvertUsing(status => status.ToString());
     }
 }
