@@ -1,3 +1,4 @@
+using Desafio.Api.Filters;
 using Desafio.Api.Token;
 using Desafio.Application;
 using Desafio.Application.Security;
@@ -65,6 +66,8 @@ builder.Services.AddAuthentication(config =>
     };
 });
 
+builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)));
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddScoped<ITokenProvider, HttpContextTokenValue>();
@@ -88,3 +91,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
