@@ -1,6 +1,8 @@
 ﻿using CommonTestsUtilities.Requests.Usuario;
 using Desafio.Exception;
+using Desafio.Exceptions;
 using FluentAssertions;
+using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Text.Json;
 using WebtApi.tests;
@@ -8,10 +10,14 @@ using WebtApi.tests;
 namespace WebtApi.test.Usuario.Criar;
 public class CriarUsuarioTest : DesafioClassFixture
 {
-    private const string METHOD = "User";
+    private const string METHOD = "Usuario";
+
+    private readonly string _token;
 
     public CriarUsuarioTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
+        _token = webApplicationFactory.Get_Usuario_Perfil_Administrador.GetToken();
+
     }
 
     [Fact]
@@ -19,7 +25,7 @@ public class CriarUsuarioTest : DesafioClassFixture
     {
         var request = CriarUsuarioRequestBuild.Build();
 
-        var result = await RequestPost(METHOD, request);
+        var result = await RequestPost(METHOD, request, _token);
 
         result.StatusCode.Should().Be(HttpStatusCode.Created);
 
@@ -28,7 +34,6 @@ public class CriarUsuarioTest : DesafioClassFixture
         var response = await JsonDocument.ParseAsync(body);
 
         response.RootElement.GetProperty("nome").GetString().Should().Be(request.Nome);
-        response.RootElement.GetProperty("token").GetString().Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -37,7 +42,7 @@ public class CriarUsuarioTest : DesafioClassFixture
         var request = CriarUsuarioRequestBuild.Build();
         request.Nome = string.Empty;
 
-        var result = await RequestPost(requestUri: METHOD, request: request);
+        var result = await RequestPost(requestUri: METHOD, request: request,_token);
 
         result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
