@@ -44,14 +44,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
     public virtual async Task AdicionarAsync(T entity)
     {
-        try
-        {
-            await _dbSet.AddAsync(entity);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+            await _dbSet.AddAsync(entity);   
     }
 
     public virtual async Task AtualizarAsync(T entity)
@@ -61,6 +54,6 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
     public virtual async Task RemoverAsync(T entity)
     {
-        _dbSet.Remove(entity);
+         _dbSet.Remove(entity);
     }
 }
