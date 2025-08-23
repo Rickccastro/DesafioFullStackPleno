@@ -3,43 +3,61 @@ using Desafio.Application.UseCase.Tarefa.Criar;
 using Desafio.Application.UseCase.Tarefa.Deletar;
 using Desafio.Application.UseCase.Tarefa.Listar;
 using Desafio.Communication.Requests.Tarefa;
+using Desafio.Communication.Responses.Error;
+using Desafio.Communication.Responses.Tarefa;
+using Desafio.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Desafio.Api.Controllers;
 [Route("[controller]")]
+[Authorize(Roles = $"{nameof(Perfis.Administrador)},{nameof(Perfis.Usuario)}")]
+[ProducesResponseType(typeof(ResponseError), StatusCodes.Status401Unauthorized)]
 [ApiController]
 public class TarefasController : ControllerBase
 {
-    [Route("criar-tarefa")]
     [HttpPost]
+    [ProducesResponseType(typeof(TarefaResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ResponseError), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> CriarTarefa([FromServices] ICriarTarefaUseCase useCase, [FromBody] CriarTarefaRequest request)
     {
         var tarefa = await useCase.CriarTarefa(request);
 
-        return Ok(tarefa);
+        return Created(string.Empty,tarefa);
     }
-    [Route("listagem-tarefa")]
-    [HttpPost]
+
+    [HttpGet]
+    [ProducesResponseType(typeof(TarefaListagemResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> ListaTarefa([FromServices] IListarTarefaUseCase useCase)
     {
-        var tarefa = await useCase.ListarTarefa();
+        var response = await useCase.ListarTarefa();
 
-        return Ok(tarefa);
+        if (response.Count != 0)
+            return Ok(response);
+
+        return NoContent();
     }
-    [Route("atualizar-tarefa")]
+
     [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseError), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseError), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> AtualizarTarefa([FromServices] IAtualizarTarefaUseCase useCase, [FromBody] AtualizarTarefaRequest request)
     {
-        var tarefa = await useCase.AtualizarTarefa(request);
+        await useCase.AtualizarTarefa(request);
 
-        return Ok(tarefa);
+        return NoContent();
     }
-    [Route("deletar-tarefa")]
-    [HttpPut]
-    public async Task<ActionResult> DeletarTarefa([FromServices] IDeletarTarefaUseCase useCase, [FromBody] DeletarTarefaRequest request)
-    {
-        var tarefa = await useCase.DeletarTarefa(request);
 
-        return Ok(tarefa);
+    [HttpDelete]
+    [Route("{tarefaId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseError), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> DeletarTarefa([FromServices] IDeletarTarefaUseCase useCase, [FromRoute] Guid tarefaId)
+    {
+        var tarefa = await useCase.DeletarTarefa(tarefaId);
+
+        return NoContent();
     }
 }
