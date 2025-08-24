@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {jwtDecode} from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -21,4 +22,15 @@ private readonly TOKEN_KEY = 'auth_token';
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+  getUserRole():string {
+    const token  = this.getToken();
+    if(!token){
+      return ''
+    }
+
+    const decoded: any = jwtDecode(token);
+    return decoded.role || null; 
+  }
+
 }
+
