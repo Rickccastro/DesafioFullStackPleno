@@ -7,7 +7,12 @@
 **/*.user
 **/*.suo
 **/appsettings.Development.json
+**/appsettings.Production.json
+**/appsettings.Test.json
 
+**/api.development.json
+**/api.production.json
+**/api.staging.json
 # -------------------------
 # Angular / Frontend
 # -------------------------
