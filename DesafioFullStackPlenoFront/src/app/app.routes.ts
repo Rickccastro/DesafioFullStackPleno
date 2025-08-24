@@ -4,15 +4,24 @@ import { LoginUsuariosComponent } from './features/login/login-usuarios/login-us
 import { TarefasManagerComponent } from './features/tarefas/tarefas-manager/tarefas-manager.component';
 import { usuarioResolver } from './core/resolvers/usuario.resolver';
 import { tarefasResolver } from './core/resolvers/tarefas.resolver';
+import { AuthPerfilGuard } from './core/auth/guards/auth-perfil.guard';
+import { AuthAdminPerfilGuard } from './core/auth/guards/auth-admin-perfil.guard';
+import { HomeComponent } from './features/home/home.component';
 
 export const routes: Routes = [
  {
-  path:'login',
+  path:'',
+  canActivate: [AuthPerfilGuard],
   component: LoginUsuariosComponent,
+}, 
+ {
+  path:'home',
+  component: HomeComponent,
 }, 
  {
   path:'usuarios',
   component: UsuariosManagerComponent,
+  canActivate:[AuthAdminPerfilGuard],
   resolve:{
     usuarios: usuarioResolver
   }
@@ -20,9 +29,14 @@ export const routes: Routes = [
 {
   path:'tarefas',
   component: TarefasManagerComponent,
+    canActivate:[AuthPerfilGuard],
       resolve: {
       usuarios: usuarioResolver,
       tarefas: tarefasResolver
   }
+},
+{
+  path:'**',
+  redirectTo: '',
 } 
 ];
