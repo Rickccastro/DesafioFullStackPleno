@@ -1,0 +1,39 @@
+<div class="min-h-screen bg-gray-900 p-6">
+  <!-- Cabeçalho e Form -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-white mb-4">Gerenciamento de Usuários</h1>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col sm:flex-row gap-4">
+      <input formControlName="titulo" placeholder="Título" class="flex-1 p-2 rounded-md bg-gray-800 text-white placeholder-gray-400 focus:outline-indigo-500"/>
+      <input formControlName="descricao" placeholder="Descrição" class="flex-1 p-2 rounded-md bg-gray-800 text-white placeholder-gray-400 focus:outline-indigo-500"/>
+
+      <select formControlName="status" class="flex-1 p-2 rounded-md bg-gray-800 text-white focus:outline-indigo-500">
+          <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+      </select>
+
+    
+    <select formControlName="usuarioId" class="flex-1 p-2 rounded-md bg-gray-800 text-white focus:outline-indigo-500">       
+        <option  *ngFor="let r of responsavelOptions()" [value]="r.id">{{ r.nome }}</option>
+    </select>
+
+      <button type="submit" class="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-md">
+        {{ editingTask ? 'Atualizar' : 'Adicionar' }}
+      </button>
+      <button *ngIf="editingTask" type="button" (click)="cancelEdit()" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-md">
+        Cancelar
+      </button>
+    </form>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div *ngFor="let tarefa of listaTarefas()" class="bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
+      <h2 class="text-lg font-semibold text-white mb-2">{{ tarefa.titulo }}</h2>
+      <p class="text-gray-300 mb-4">{{ tarefa.id }}</p>
+      <p class="text-gray-300 mb-4">{{ tarefa.descricao }}</p>
+      <p class="text-gray-300 mb-4">{{ tarefa.status }}</p>
+      <div class="flex justify-between">
+        <button (click)="edit(tarefa)" class="bg-green-500 hover:bg-green-400 text-white px-3 py-1 rounded-md text-sm">Editar</button>
+        <button (click)="deleteTarefa(tarefa.id)" class="bg-red-500 hover:bg-red-400 text-white px-3 py-1 rounded-md text-sm">Excluir</button>
+      </div>
+    </div>
+  </div>
+</div>
