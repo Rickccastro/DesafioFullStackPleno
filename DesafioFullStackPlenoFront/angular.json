@@ -64,10 +64,16 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "DesafioFullStackPlenoFront:build:production"
+              "buildTarget": "DesafioFullStackPlenoFront:build:production",
+              "proxyConfig": "src/app/core/configs/api/api.production.json"
             },
             "development": {
-              "buildTarget": "DesafioFullStackPlenoFront:build:development"
+              "buildTarget": "DesafioFullStackPlenoFront:build:development",
+              "proxyConfig": "src/app/core/configs/api/api.development.json"
+            },
+            "staging": {
+              "buildTarget": "DesafioFullStackPlenoFront:build:staging",
+              "proxyConfig": "src/app/core/configs/api/api.staging.json"
             }
           },
           "defaultConfiguration": "development"
