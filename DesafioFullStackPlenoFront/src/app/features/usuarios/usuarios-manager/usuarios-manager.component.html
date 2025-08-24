@@ -1,0 +1,35 @@
+<div class="min-h-screen bg-gray-900 p-6">
+  <!-- Cabeçalho e Form -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-white mb-4">Gerenciamento de Usuários</h1>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col sm:flex-row gap-4">
+      <input formControlName="nome" placeholder="Nome" class="flex-1 p-2 rounded-md bg-gray-800 text-white placeholder-gray-400 focus:outline-indigo-500"/>
+      <input formControlName="email" placeholder="Email" class="flex-1 p-2 rounded-md bg-gray-800 text-white placeholder-gray-400 focus:outline-indigo-500"/>
+      <input formControlName="senha" placeholder="Senha" class="flex-1 p-2 rounded-md bg-gray-800 text-white placeholder-gray-400 focus:outline-indigo-500"/>
+
+      <select formControlName="perfil" class="flex-1 p-2 rounded-md bg-gray-800 text-white focus:outline-indigo-500">
+          <option *ngFor="let p of perfilOptions" [value]="p">{{ p }}</option>
+      </select>
+
+      <button type="submit" class="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-md">
+        {{ editingUsuario ? 'Atualizar' : 'Adicionar' }}
+      </button>
+      <button *ngIf="editingUsuario" type="button" (click)="cancelEdit()" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-md">
+        Cancelar
+      </button>
+    </form>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div *ngFor="let usuario of listUsuarios()" class="bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
+      <h2 class="text-lg font-semibold text-white mb-2">{{ usuario.nome }}</h2>
+      <p class="text-gray-300 mb-4">{{ usuario.id }}</p>
+      <p class="text-gray-300 mb-4">{{ usuario.email }}</p>
+      <p class="text-gray-300 mb-4">{{ usuario.perfil }}</p>
+      <p class="text-gray-300 mb-4">{{ usuario.senha }}</p>
+      <div class="flex justify-between">
+        <button (click)="edit(usuario)" class="bg-green-500 hover:bg-green-400 text-white px-3 py-1 rounded-md text-sm">Editar</button>
+      </div>
+    </div>
+  </div>
+</div>
