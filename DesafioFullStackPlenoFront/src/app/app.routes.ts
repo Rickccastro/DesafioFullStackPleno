@@ -13,6 +13,9 @@ export const routes: Routes = [
  {
   path:'usuarios',
   component: UsuariosManagerComponent,
+  resolve:{
+    usuarios: usuarioResolver
+  }
 },
 {
   path:'tarefas',
