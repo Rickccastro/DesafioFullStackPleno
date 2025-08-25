@@ -71,3 +71,4 @@ Thumbs.db
 
 **/.tailwind/
 
+/DesafioFullStackPlenoBack/tests/CommonTestsUtilities/LoggedUser/LoggedUserBuilder.cs
