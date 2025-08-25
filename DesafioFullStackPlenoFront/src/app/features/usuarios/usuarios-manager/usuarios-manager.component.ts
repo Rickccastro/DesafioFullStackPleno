@@ -1,5 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Tarefas } from '../../../core/models/Tarefas';
 import { Usuario } from '../../../core/models/Usuario';
@@ -11,7 +16,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-usuarios-manager',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './usuarios-manager.component.html',
-  styleUrl: './usuarios-manager.component.scss'
+  styleUrl: './usuarios-manager.component.scss',
 })
 export class UsuariosManagerComponent implements OnInit {
   usuarioService = inject(UsuarioService);
@@ -36,31 +41,32 @@ export class UsuariosManagerComponent implements OnInit {
     this.perfilOptions = ['Usuario', 'Administrador'];
   }
 
-submit() {
-  if (this.form.invalid) return;
+  submit() {
+    if (this.form.invalid) return;
 
-  if (this.editingUsuario) {
-    const usuarioAtualizado = {
-      ...this.editingUsuario,
-      ...this.form.value,
-    };
+    if (this.editingUsuario) {
+      const usuarioAtualizado = {
+        ...this.editingUsuario,
+        ...this.form.value,
+      };
 
-    this.usuarioService.atualizar(usuarioAtualizado).subscribe(() => {
-      this.listUsuarios.update((usuarios) =>
-        usuarios.map((u) =>
-          u.id === usuarioAtualizado.id ? usuarioAtualizado : u
-        )
-      );
-      this.editingUsuario = null;
-    });
-
-  } else {
-    this.usuarioService.adicionar(this.form.value).subscribe((novoUsuario) => {
-      this.listUsuarios.update((usuarios) => [...usuarios, novoUsuario]);
-    });
-  }
+      this.usuarioService.atualizar(usuarioAtualizado).subscribe(() => {
+        this.listUsuarios.update((usuarios) =>
+          usuarios.map((u) =>
+            u.id === usuarioAtualizado.id ? usuarioAtualizado : u
+          )
+        );
+        this.editingUsuario = null;
+      });
+    } else {
+      this.usuarioService.adicionar(this.form.value).subscribe(() => {
+        this.usuarioService.getUsuarios().subscribe((usuarios) => {
+          this.listUsuarios.set(usuarios);
+        });
+      });
+    }
     this.form.reset();
-}
+  }
   edit(usuario: Usuario) {
     this.editingUsuario = usuario;
 
@@ -75,5 +81,5 @@ submit() {
   cancelEdit() {
     this.editingUsuario = null;
     this.form.reset();
-  }  
+  }
 }
