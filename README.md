@@ -1,8 +1,4 @@
 # 🚀 Projeto Full Stack: C# .NET 8 + Angular 19
-
-Bem-vindo ao seu projeto Full Stack! Aqui temos **C# .NET 8** no backend e **Angular 19** no frontend.
-Ele já vem pronto para usar **JWT** 🔐, proxy para o frontend 🌐, e conexão com SQL Server 🗄️ local.
-
 ---
 
 ## 🛠️ Pré-requisitos
