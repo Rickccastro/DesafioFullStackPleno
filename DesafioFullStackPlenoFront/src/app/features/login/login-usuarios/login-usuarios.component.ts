@@ -44,7 +44,7 @@ export class LoginUsuariosComponent implements OnInit {
     this.loginUser.loginUser(credentials).subscribe({
       next: (response) => {
         this.authTokenService.setToken(response.token);
-        this.router.navigate(['/usuarios']); // rota pós-login
+        this.router.navigate(['/home']); // rota pós-login
       },
       error: (err) => {
         alert('Erro ao fazer login. Verifique seus dados.');
