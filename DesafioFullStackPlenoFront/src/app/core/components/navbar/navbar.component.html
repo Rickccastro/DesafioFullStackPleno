@@ -1,0 +1,121 @@
+<nav class="bg-gray-800 text-white shadow-md relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <!-- Logo -->
+      <div class="text-2xl font-bold">Gerenciamento de Tarefas</div>
+
+      <!-- Desktop Menu -->
+      <ul class="hidden md:flex space-x-6">
+        <li class="relative" *ngFor="let item of menuItems()">
+          
+          <!-- Item sem submenu -->
+          <ng-container *ngIf="!item.submenu; else hasSubmenu">
+            <button
+              (click)="navigateAndClose(item.link)"
+              class="hover:text-yellow-300 transition-colors duration-200"
+            >
+              {{ item.label }}
+            </button>
+          </ng-container>
+
+          <!-- Item com submenu -->
+          <ng-template #hasSubmenu>
+            <button
+              (click)="toggleSubmenu(item.label)"
+              class="hover:text-yellow-300 transition-colors duration-200"
+            >
+              {{ item.label }}
+            </button>
+
+            <!-- Submenu -->
+            <ul
+              *ngIf="openSubmenu() === item.label"
+              class="absolute bg-gray-700 mt-1 rounded shadow-md"
+            >
+              <ng-container *ngFor="let sub of item.submenu">
+                <li>
+                  <button
+                    *ngIf="sub.label === 'Logout'; else linkButton"
+                    (click)="logoutAndClose()"
+                    class="w-full text-left px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                  >
+                    {{ sub.label }}
+                  </button>
+
+                  <ng-template #linkButton>
+                    <button
+                      (click)="navigateAndClose(sub.link)"
+                      class="w-full text-left px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                    >
+                      {{ sub.label }}
+                    </button>
+                  </ng-template>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-template>
+
+        </li>
+      </ul>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button
+          (click)="toggleMobileMenu()"
+          class="px-3 py-2 border rounded text-white border-white"
+        >
+          Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="mobileMenuOpen()" class="md:hidden mt-2 space-y-1">
+      <div *ngFor="let item of menuItems()">
+        
+        <!-- Item sem submenu -->
+        <div *ngIf="!item.submenu">
+          <button
+            (click)="navigateAndClose(item.link)"
+            class="w-full text-left px-4 py-2 hover:bg-gray-700 cursor-pointer"
+          >
+            {{ item.label }}
+          </button>
+        </div>
+
+        <!-- Item com submenu -->
+        <div *ngIf="item.submenu">
+          <button
+            (click)="toggleSubmenu(item.label)"
+            class="w-full text-left px-4 py-2 hover:bg-gray-700 cursor-pointer"
+          >
+            {{ item.label }}
+          </button>
+
+          <!-- Submenu -->
+          <div *ngIf="openSubmenu() === item.label" class="pl-4">
+            <ng-container *ngFor="let sub of item.submenu">
+              <button
+                *ngIf="sub.label === 'Logout'; else mobileLink"
+                (click)="logoutAndClose()"
+                class="w-full text-left px-4 py-2 hover:bg-gray-600 cursor-pointer"
+              >
+                {{ sub.label }}
+              </button>
+
+              <ng-template #mobileLink>
+                <button
+                  (click)="navigateAndClose(sub.link)"
+                  class="w-full text-left px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  {{ sub.label }}
+                </button>
+              </ng-template>
+            </ng-container>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</nav>
