@@ -1,0 +1,32 @@
+<div class="min-h-screen bg-gray-900 p-6">
+  <!-- Cabeçalho -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-white mb-4">Dashboard de Tarefas</h1>
+  </div>
+  <!-- Grid de Gráficos -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 place-items-center">
+    
+    <!-- Gráfico 1 -->
+    <div class="bg-gray-800 p-4 rounded-lg shadow flex flex-col items-center w-full max-w-md">
+      <h3 class="text-white font-semibold mb-2">Número de Tarefas por Status</h3>
+      <canvas baseChart
+              [data]="tarefasStatusChartData"
+              [type]="tarefasStatusChartType"
+              [options]="tarefasStatusChartOptions"
+              class="w-full max-h-64 mx-auto">
+      </canvas>
+    </div>
+
+    <!-- Gráfico 2 -->
+    <div class="bg-gray-800 p-4 rounded-lg shadow flex flex-col items-center w-full max-w-md">
+      <h3 class="text-white font-semibold mb-2">Últimas 5 Tarefas Criadas</h3>
+      <canvas baseChart
+              [data]="ultimasTarefasChartData"
+              [type]="ultimasTarefasChartType"
+              [options]="ultimasTarefasChartOptions"
+              class="w-full max-h-64 mx-auto">
+      </canvas>
+    </div>
+
+  </div>
+</div>
