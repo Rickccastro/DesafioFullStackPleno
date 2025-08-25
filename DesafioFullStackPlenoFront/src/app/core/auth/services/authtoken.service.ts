@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../../models/Responses/LoginResponse';
-import { RefreshResponse } from '../../models/Responses/RefreshResponse';
 
 @Injectable({
   providedIn: 'root',
