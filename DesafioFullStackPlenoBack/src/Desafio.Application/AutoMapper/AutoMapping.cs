@@ -37,6 +37,8 @@ public class AutoMapping : Profile
         CreateMap<Tarefa, TarefaResponse>();
         CreateMap<Usuario, LoginUsuarioResponse>()
 .ForMember(dest => dest.Token, opt => opt.Ignore());
+
+        CreateMap<Usuario, ListaUsuarioResponse>();
     }
 
 
