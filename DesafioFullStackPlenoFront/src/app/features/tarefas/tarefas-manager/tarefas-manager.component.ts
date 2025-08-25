@@ -1,78 +1,124 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Tarefas } from '../../../core/models/Tarefas';
-import { TarefasService } from '../../../shared/services/tarefas.service';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { TarefasService } from '../../../shared/services/tarefas.service';
 import { UsuarioService } from '../../../shared/services/usuario.service';
-import { Observable } from 'rxjs/internal/Observable';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Usuario } from '../../../core/models/Usuario';
 import { ActivatedRoute } from '@angular/router';
+import { Tarefas } from '../../../core/models/Tarefas';
+import { Usuario } from '../../../core/models/Usuario';
 
 @Component({
   selector: 'app-tarefas-manager',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tarefas-manager.component.html',
-  styleUrl: './tarefas-manager.component.scss',
+  styleUrls: ['./tarefas-manager.component.scss'],
 })
 export class TarefasManagerComponent implements OnInit {
-  tarefasService = inject(TarefasService);
+  tarefaService = inject(TarefasService);
   usuarioService = inject(UsuarioService);
-  form!: FormGroup;
-  editingTask: Tarefas | null = null;
-  statusOptions: string[] = [];
-  responsavelOptions = signal<Usuario[]>([]);
-  listaTarefas = signal<Tarefas[]>([]);
   private route = inject(ActivatedRoute);
 
-  ngOnInit() {
-    this.form = new FormGroup({
-      titulo: new FormControl('', [Validators.required]),
-      descricao: new FormControl(''),
-      status: new FormControl('', [Validators.required]),
-      usuarioId: new FormControl('', [Validators.required]),
-    });
+  form!: FormGroup;
+  editingTask: Tarefas | null = null;
 
-    this.route.data.subscribe((data) => {
-      this.responsavelOptions.set(data['usuarios']);
-    });
+  statusOptions: string[] = ['Pendente', 'EmAndamento', 'Concluida'];
+  responsavelOptions = signal<Usuario[]>([]);
+  listaTarefas = signal<Tarefas[]>([]);
 
-    this.route.data.subscribe((data) => {
-      this.listaTarefas.set(data['tarefas']);
-    });
+  currentPage = signal(1);
+  pageSize = 6;
 
-    this.statusOptions = ['Pendente', 'EmAndamento', 'Concluida'];
-  }
+  // Trigger para atualizar o computed quando o form muda
+  filterTrigger = signal(0);
 
-submit() {
-  if (this.form.invalid) return;
+  filteredTarefas = computed(() => {
+    // Força reavaliação do computed
+    this.filterTrigger();
 
-  if (this.editingTask) {
-    const tarefaAtualizada = {
-      ...this.editingTask,
-      ...this.form.value,
-    };
+    if (!this.form) return this.listaTarefas();
 
-    this.tarefasService.atualizar(tarefaAtualizada).subscribe(() => {
-      this.listaTarefas.update((tarefas) =>
-        tarefas.map((t) =>
-          t.id === tarefaAtualizada.id ? tarefaAtualizada : t
+    const { usuarioNome, ultimasCinco } =
+      this.form.value;
+    let tarefas = [...this.listaTarefas()];
+
+    if (usuarioNome) {
+      tarefas = tarefas.filter((t) =>
+        this.responsavelOptions().some(
+          (u) => u.id === t.usuarioId && u.nome === usuarioNome
         )
       );
-      this.editingTask = null;
+    }
+    // Últimas 5 tarefas
+    if (ultimasCinco) {
+      tarefas = tarefas
+        .sort(
+          (a, b) =>
+            new Date(b.dataCriacao).getTime() -
+            new Date(a.dataCriacao).getTime()
+        )
+        .slice(0, 5);
+    }
+
+    return tarefas;
+  });
+
+  // Paginação
+  paginatedTarefas = computed(() => {
+    const tarefas = this.filteredTarefas();
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return tarefas.slice(start, start + this.pageSize);
+  });
+
+  totalPages = computed(() =>
+    Math.ceil(this.filteredTarefas().length / this.pageSize)
+  );
+
+  ngOnInit() {
+
+    this.form = new FormGroup({
+      titulo: new FormControl(''),
+      descricao: new FormControl(''),
+      status: new FormControl(''),
+      usuarioId: new FormControl(''),
+      usuarioNome: new FormControl(''),
+      ultimasCinco: new FormControl(false),
     });
 
-  } else {
-    this.tarefasService.adicionar(this.form.value).subscribe((novaTarefa) => {
-      this.listaTarefas.update((tarefas) => [...tarefas, novaTarefa]);
+    this.route.data.subscribe((data) => {
+      this.responsavelOptions.set(data['usuarios'] || []);
+      this.listaTarefas.set(data['tarefas'] || []);
+    });
+
+    // Atualiza trigger sempre que o formulário muda
+    this.form.valueChanges.subscribe(() => {
+      this.currentPage.set(1);
+      this.filterTrigger.update((n) => n + 1);
     });
   }
-    this.form.reset();
-}
+
+  submit() {
+    if (this.editingTask) {
+      const tarefaAtualizada = { ...this.editingTask, ...this.form.value };
+      this.tarefaService.atualizar(tarefaAtualizada).subscribe(() => {
+        this.listaTarefas.update((tarefas) =>
+          tarefas.map((t) =>
+            t.id === tarefaAtualizada.id ? tarefaAtualizada : t
+          )
+        );
+        this.editingTask = null;
+        this.form.reset();
+      });
+    } else {
+      this.tarefaService.adicionar(this.form.value).subscribe((novaTarefa) => {
+        this.listaTarefas.update((tarefas) => [...tarefas, novaTarefa]);
+        this.form.reset();
+      });
+    }
+  }
+
   edit(task: Tarefas) {
     this.editingTask = task;
-
     this.form.patchValue({
       titulo: task.titulo,
       descricao: task.descricao,
@@ -81,16 +127,23 @@ submit() {
     });
   }
 
- deleteTarefa(id: string) {
-  this.tarefasService.deletar(id).subscribe(() => {
-    this.listaTarefas.update(tarefas =>
-      tarefas.filter(t => t.id !== id)
-    );
-  });
-}
+  deleteTarefa(id: string) {
+    this.tarefaService.deletar(id).subscribe(() => {
+      this.listaTarefas.update((tarefas) => tarefas.filter((t) => t.id !== id));
+    });
+  }
 
   cancelEdit() {
     this.editingTask = null;
     this.form.reset();
+  }
+
+  prevPage() {
+    if (this.currentPage() > 1) this.currentPage.update((p) => p - 1);
+  }
+
+  nextPage() {
+    if (this.currentPage() < this.totalPages())
+      this.currentPage.update((p) => p + 1);
   }
 }
