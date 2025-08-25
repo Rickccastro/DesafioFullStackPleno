@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Desafio.Application\Desafio.Application.csproj" />
-		<ProjectReference Include="..\..\src\Desafio.Communication\Desafio.Communication\Desafio.Communication.csproj" />
+		<ProjectReference Include="..\..\src\Desafio.Communication\Desafio.Communication.csproj" />
 	</ItemGroup>
 
 </Project>

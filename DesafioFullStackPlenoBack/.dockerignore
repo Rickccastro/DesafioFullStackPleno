@@ -1,0 +1,9 @@
+bin/
+obj/
+*.md
+*.user
+*.suo
+.vs/
+*.log
+Dockerfile
+docker-compose.yml
