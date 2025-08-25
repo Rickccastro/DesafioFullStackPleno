@@ -8,11 +8,11 @@ RUN npm install
 
 # Copia o código e builda a aplicação
 COPY . .
-RUN npm run build --prod
+RUN npm run build -- --project DesafioFullStackPlenoFront --configuration development
 
 # 2. Runtime (Nginx)
 FROM nginx:alpine
-# Substitua "desafio-fullstack-pleno-front" pelo nome da pasta gerada no dist
-COPY --from=build /app/dist/desafio-fullstack-pleno-front /usr/share/nginx/html
+# Copia build final do Angular para o Nginx
+COPY --from=build /app/dist/desafio-full-stack-pleno-front /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
