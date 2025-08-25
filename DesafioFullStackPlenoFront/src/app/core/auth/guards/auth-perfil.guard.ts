@@ -9,10 +9,10 @@ export const AuthPerfilGuard: CanActivateFn = (route, state) => {
   const role = authTokenService.getUserRole();
   const router = inject(Router);
 
-  if(token != '' || role === 'Administrador' || role === 'Usuario'){
-    return true 
-  }else{
-    router.navigate(['/'])
-    return false 
+  if(token && (role === 'Administrador' || role === 'Usuario')){
+    return true; // rota liberada
+  } else {
+    router.navigate(['/']); // redireciona para login
+    return false;
   }
 };
