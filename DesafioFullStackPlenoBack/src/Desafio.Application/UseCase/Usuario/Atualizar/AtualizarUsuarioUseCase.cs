@@ -26,7 +26,7 @@ public class AtualizarUsuarioUseCase : IAtualizarUsuarioUseCase
 
     public async Task<UsuarioResponse> AtualizarUsuario(AtualizarUsuarioRequest request)
     {
-        await this.Validate(request);
+        this.Validate(request);
 
         var usuario = await _usuarioRepository.ObterPorIdAsync(request.Id);
 
@@ -41,7 +41,7 @@ public class AtualizarUsuarioUseCase : IAtualizarUsuarioUseCase
         return _mapper.Map<UsuarioResponse>(usuario);
     }
 
-    private async Task Validate(AtualizarUsuarioRequest request)
+    private void Validate(AtualizarUsuarioRequest request)
     {
         var validator = new ValidadorAtualizarUsuario();
 
