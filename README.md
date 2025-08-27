@@ -8,7 +8,7 @@ Antes de começar, certifique-se de ter instalado:
 * [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 🟢
 * [Node.js](https://nodejs.org/) (versão LTS recomendada) 🟢
 * [Angular CLI](https://angular.io/cli) ⚡
-* SQL Server rodando (ou outra instância compatível) 🗄️
+* SQL Server
 
 ---
 
